@@ -26,6 +26,14 @@ public class TiroCorredor {
     @ColumnInfo(name = "segunda_corrida")
     private Date segundaCorrida;
 
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
     public String getNome() {
         return nome;
     }

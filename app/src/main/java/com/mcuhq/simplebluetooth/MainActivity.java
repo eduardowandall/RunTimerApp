@@ -1,5 +1,6 @@
 package com.mcuhq.simplebluetooth;
 
+import android.app.Activity;
 import android.arch.persistence.room.Room;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -29,7 +31,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 //example: http://mcuhq.com/27/simple-android-bluetooth-application-with-arduino-example
@@ -82,14 +86,15 @@ public class MainActivity extends AppCompatActivity {
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").build();
+
 
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
-
+final TiroCorredor tiro = new TiroCorredor();
+final AgentAsyncTask agentAsyncTask = new AgentAsyncTask(this, tiro);
+tiro.setNome("Eduardo");
         mHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
                 if(msg.what == MESSAGE_READ){
@@ -100,6 +105,15 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Log.i("received",readMessage);
+
+                   if(readMessage.contains("MIda"))
+                            tiro.setPrimeiraCorrida(new Date(12311));
+                    if(readMessage.contains("MP"))
+                            tiro.setTempoDecorridoPlataforma(new Date(12311));
+                    if(readMessage.contains("MVolta"))
+                            tiro.setSegundaCorrida(new Date(12311));
+                    if(readMessage.contains("FINISH"))
+                        agentAsyncTask.execute();
                     mReadBuffer.setText(readMessage);
                 }
 
@@ -348,12 +362,36 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
+
+        //Prevent leak
+        private WeakReference<Activity> weakActivity;
+        private TiroCorredor tiro;
+
+        public AgentAsyncTask(Activity activity, TiroCorredor tiro) {
+            weakActivity = new WeakReference<>(activity);
+            this.tiro = tiro;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            Activity activity = weakActivity.get();
+            final AppDatabase db = Room.databaseBuilder(activity.getApplicationContext(),
+                    AppDatabase.class, "database-name").build();
+            db.tiroCorredorDao().insertAll(tiro);
+            return 1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer agentsCount) {
+            Activity activity = weakActivity.get();
+            if (activity == null) {
+                return;
+            }
+        }
 
 
-
-
-
-
+    }
 
 
 
