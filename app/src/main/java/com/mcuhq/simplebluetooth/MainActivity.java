@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -71,60 +72,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBluetoothStatus = (TextView)findViewById(R.id.bluetoothStatus);
-        mReadBuffer = (TextView) findViewById(R.id.readBuffer);
-        mScanBtn = (Button)findViewById(R.id.scan);
-        //mOffBtn = (Button)findViewById(R.id.off);
-        mDiscoverBtn = (Button)findViewById(R.id.discover);
-        mListPairedDevicesBtn = (Button)findViewById(R.id.PairedBtn);
-        //mLED1 = (CheckBox)findViewById(R.id.checkboxLED1);
+        mBluetoothStatus = findViewById(R.id.bluetoothStatus);
+        mReadBuffer =  findViewById(R.id.readBuffer);
+        mScanBtn = findViewById(R.id.scan);
+        mDiscoverBtn = findViewById(R.id.discover);
+        mListPairedDevicesBtn = findViewById(R.id.PairedBtn);
 
-        mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+        mBTArrayAdapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
 
-        mDevicesListView = (ListView)findViewById(R.id.devicesListView);
+        mDevicesListView = findViewById(R.id.devicesListView);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
+        mHandler = new IncomingHandler(new BluetoothListener(this));
 
-
-
-        // Ask for location permission if not already allowed
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-
-final TiroCorredor tiro = new TiroCorredor();
-final AgentAsyncTask agentAsyncTask = new AgentAsyncTask(this, tiro);
-tiro.setNome("Eduardo");
-        mHandler = new Handler(){
-            public void handleMessage(android.os.Message msg){
-                if(msg.what == MESSAGE_READ){
-                    String readMessage = null;
-                    try {
-                        readMessage = new String((byte[]) msg.obj, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    Log.i("received",readMessage);
-
-                   if(readMessage.contains("MIda"))
-                            tiro.setPrimeiraCorrida(new Date(12311));
-                    if(readMessage.contains("MP"))
-                            tiro.setTempoDecorridoPlataforma(new Date(12311));
-                    if(readMessage.contains("MVolta"))
-                            tiro.setSegundaCorrida(new Date(12311));
-                    if(readMessage.contains("FINISH"))
-                        agentAsyncTask.execute();
-                    mReadBuffer.setText(readMessage);
-                }
-
-                if(msg.what == CONNECTING_STATUS){
-                    if(msg.arg1 == 1)
-                        mBluetoothStatus.setText("Connected to Device: " + (String)(msg.obj));
-                    else
-                        mBluetoothStatus.setText("Connection Failed");
-                }
-            }
-        };
 
         if (mBTArrayAdapter == null) {
             // Device does not support Bluetooth
@@ -358,42 +319,19 @@ tiro.setNome("Eduardo");
             } catch (IOException e) { }
         }
     }
+    static class IncomingHandler extends Handler {
+        private final WeakReference<BluetoothListener> mService;
 
-
-
-
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, Integer> {
-
-        //Prevent leak
-        private WeakReference<Activity> weakActivity;
-        private TiroCorredor tiro;
-
-        public AgentAsyncTask(Activity activity, TiroCorredor tiro) {
-            weakActivity = new WeakReference<>(activity);
-            this.tiro = tiro;
+        IncomingHandler(BluetoothListener service) {
+            mService = new WeakReference(service);
         }
 
         @Override
-        protected Integer doInBackground(Void... params) {
-            Activity activity = weakActivity.get();
-            final AppDatabase db = Room.databaseBuilder(activity.getApplicationContext(),
-                    AppDatabase.class, "database-name").build();
-            db.tiroCorredorDao().insertAll(tiro);
-            return 1;
-        }
-
-        @Override
-        protected void onPostExecute(Integer agentsCount) {
-            Activity activity = weakActivity.get();
-            if (activity == null) {
-                return;
+        public void handleMessage(Message msg) {
+            BluetoothListener service = mService.get();
+            if (service != null) {
+                service.handleMessage(msg);
             }
         }
-
-
     }
-
-
-
-
 }

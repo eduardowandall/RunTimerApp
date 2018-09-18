@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 public class TiroCorredor {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int uid;
 
     @ColumnInfo(name = "nome")
@@ -64,5 +64,12 @@ public class TiroCorredor {
 
     public void setSegundaCorrida(Date segundaCorrida) {
         this.segundaCorrida = segundaCorrida;
+    }
+
+    public boolean isEverythingPopulated() {
+        return !this.getNome().isEmpty()
+                && this.getPrimeiraCorrida() != null
+                && this.getSegundaCorrida() != null
+                && this.getTempoDecorridoPlataforma() != null;
     }
 }
