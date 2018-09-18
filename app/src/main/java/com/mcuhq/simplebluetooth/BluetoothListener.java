@@ -40,12 +40,12 @@ public class BluetoothListener {
             Log.i("received", readMessage);
 
             Intent intent = new Intent(INTENT_SEND_BROACAST_TIRO);
-            if (readMessage.contains("sdfsdf")) {
-                intent.putExtra(EXTRA_INICIO,true);
+            if (readMessage.contains("MTapete A")) {
+                intent.putExtra(EXTRA_PE_PLATAFORMA,true);
                 context.sendBroadcast(intent);
             }
-            if (readMessage.contains("sdfsdf")) {
-                intent.putExtra(EXTRA_PE_PLATAFORMA,true);
+            if (readMessage.contains("START")) {
+                intent.putExtra(EXTRA_INICIO,true);
                 context.sendBroadcast(intent);
             }
             if (readMessage.contains("MIda")) {

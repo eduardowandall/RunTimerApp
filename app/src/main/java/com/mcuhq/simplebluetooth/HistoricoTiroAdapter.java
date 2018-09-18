@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -17,16 +18,13 @@ import java.util.List;
 
 public class HistoricoTiroAdapter extends ArrayAdapter<TiroCorredor> {
     private List<TiroCorredor> tiros;
+    SimpleDateFormat formatter;
 
     public HistoricoTiroAdapter(@NonNull Context context, int resource, @NonNull List<TiroCorredor> objects) {
         super(context, resource, objects);
         tiros = objects;
-    }
 
-    @Override
-    public void addAll(TiroCorredor... items) {
-        super.clear();
-        super.addAll(items);
+        formatter = new SimpleDateFormat("mm:ss");
     }
 
     @Override
@@ -41,9 +39,9 @@ public class HistoricoTiroAdapter extends ArrayAdapter<TiroCorredor> {
         TextView textSegundaCorrida = view.findViewById(R.id.textSegundaCorrida);
         TextView textNomeCorredor = view.findViewById(R.id.textNomeCorredor);
         // Populate the data into the template view using the data object
-        textPrimeiraCorrida.setText(tiro.getPrimeiraCorrida() == null ? "00:00" : tiro.getPrimeiraCorrida().toString());
-        textTempoDecorridoPlataforma.setText(tiro.getTempoDecorridoPlataforma() == null ? "00:00" : tiro.getTempoDecorridoPlataforma().toString());
-        textSegundaCorrida.setText(tiro.getSegundaCorrida() == null ? "00:00" : tiro.getSegundaCorrida().toString());
+        textPrimeiraCorrida.setText(tiro.getPrimeiraCorrida() == null ? "00:00" : formatter.format(tiro.getPrimeiraCorrida()));
+        textTempoDecorridoPlataforma.setText(tiro.getTempoDecorridoPlataforma() == null ? "00:00" : formatter.format(tiro.getTempoDecorridoPlataforma()));
+        textSegundaCorrida.setText(tiro.getSegundaCorrida() == null ? "00:00" : formatter.format(tiro.getSegundaCorrida()));
         textNomeCorredor.setText(tiro.getNome());
         // Return the completed view to render on screen
         return view;

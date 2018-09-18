@@ -72,4 +72,5 @@ public class TiroCorredor {
                 && this.getSegundaCorrida() != null
                 && this.getTempoDecorridoPlataforma() != null;
     }
+
 }

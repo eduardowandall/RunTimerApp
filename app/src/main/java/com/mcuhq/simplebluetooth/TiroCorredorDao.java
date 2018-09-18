@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Dao
 public interface TiroCorredorDao {
-    @Query("SELECT * FROM tiroCorredor")
+    @Query("SELECT * FROM tiroCorredor order by uid desc")
     List<TiroCorredor> getAll();
 
     @Query("SELECT * FROM tiroCorredor WHERE uid IN (:userIds)")
@@ -23,4 +23,7 @@ public interface TiroCorredorDao {
 
     @Delete
     void delete(TiroCorredor user);
+
+    @Query("DELETE FROM tiroCorredor")
+    void nukeTable();
 }

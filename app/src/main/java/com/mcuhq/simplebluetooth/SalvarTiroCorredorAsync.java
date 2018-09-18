@@ -38,6 +38,6 @@ public class SalvarTiroCorredorAsync extends AsyncTask<Void, Void, Integer> {
         if (activity == null) {
             return;
         }
-        ((TiroActivity)activity).refreshListView();
+        ((TiroActivity)activity).refreshActivity(tiro);
     }
 }

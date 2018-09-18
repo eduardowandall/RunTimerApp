@@ -35,16 +35,24 @@ public class TempoTiroBroadcastReceiver extends BroadcastReceiver {
         Boolean indicaFim = intent.getBooleanExtra(EXTRA_FIM, false);
         Boolean indicaInicio = intent.getBooleanExtra(EXTRA_INICIO, false);
         Boolean pePlataforma = intent.getBooleanExtra(EXTRA_PE_PLATAFORMA, false);
-        if (indicaInicio)
+        if (indicaInicio) {
             tiroActivity.mostrarMsgInicio();
-        if (pePlataforma)
+        }
+        if (pePlataforma) {
             tiroActivity.mostrarMsgAguardandoTiro();
-        if (primeiraCorrida > 0)
+        }
+        if (primeiraCorrida > 0) {
             tiroActivity.setTempoPrimeiraCorrida(new Date(primeiraCorrida));
-        if (segundaCorrida > 0)
+            tiro.setPrimeiraCorrida(new Date(primeiraCorrida));
+        }
+        if (segundaCorrida > 0) {
             tiroActivity.setTempoSegundaCorrida(new Date(segundaCorrida));
-        if (tempoDecorridoPlataforma > 0)
+            tiro.setSegundaCorrida(new Date(segundaCorrida));
+        }
+        if (tempoDecorridoPlataforma > 0) {
             tiroActivity.setTempoDecorridoPlataforma(new Date(tempoDecorridoPlataforma));
+            tiro.setTempoDecorridoPlataforma(new Date(tempoDecorridoPlataforma));
+        }
         if (indicaFim) {
             tiro.setNome(tiroActivity.getNomeCorredor());
             new SalvarTiroCorredorAsync(tiroActivity, tiro).execute();
