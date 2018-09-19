@@ -1,13 +1,11 @@
-package com.mcuhq.simplebluetooth;
+package com.wandall.runtimer;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,12 +14,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 //example: http://mcuhq.com/27/simple-android-bluetooth-application-with-arduino-example
 public class TiroActivity extends AppCompatActivity {
@@ -120,39 +115,64 @@ public class TiroActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        exportDB();
+        //exportDB();
         return true;
     }
-    private void exportDB() {
-
-        final AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
-//        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
-//        if (!exportDir.exists())
+//    private void exportDB() {
+//
+//        final AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database-name").allowMainThreadQueries().build();
+////        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+////        if (!exportDir.exists())
+////        {
+////            exportDir.mkdirs();
+////        }
+//
+//        try
 //        {
-//            exportDir.mkdirs();
+//            String csvFile = "Id;Nome;Primeira Corrida;Tempo Pe Plataforma;Segunda Corrida\r\n";
+//            List<TiroCorredor> historico = db.tiroCorredorDao().getAll();
+//            for (TiroCorredor tiro:
+//                    historico) {
+//                csvFile += createStringCsvLine(tiro);
+//            }
+//            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+//            File fileWithinMyDir = new File(myFilePath);
+//
+//            if(fileWithinMyDir.exists()) {
+//                intentShareFile.setType("application/pdf");
+//                intentShareFile.putExtra(Intent., Uri.parse("file://"+myFilePath));
+//
+//                intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+//                        "Sharing File...");
+//                intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
+//
+//                startActivity(Intent.createChooser(intentShareFile, "Share File"));
+//            }
+//            try {
+//                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("teste.csv", Context.MODE_PRIVATE));
+//                outputStreamWriter.write(csvFile);
+//                outputStreamWriter.close();
+//                outputStreamWriter.
+//            }
+//            catch (IOException e) {
+//                Log.e("Exception", "File write failed: " + e.toString());
+//            }
 //        }
+//        catch(Exception sqlEx)
+//        {
+//            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
+//        }
+//    }
 
-        try
-        {
-            String csvFile = "Id;Nome;Primeira Corrida;Tempo Pe Plataforma;Segunda Corrida\r\n";
-            List<TiroCorredor> historico = db.tiroCorredorDao().getAll();
-            for (TiroCorredor tiro:
-                    historico) {
-                csvFile += createStringCsvLine(tiro);
-            }
-            try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(openFileOutput("teste.csv", Context.MODE_PRIVATE));
-                outputStreamWriter.write(csvFile);
-                outputStreamWriter.close();
-            }
-            catch (IOException e) {
-                Log.e("Exception", "File write failed: " + e.toString());
-            }
+    private File getTempFile(Context context, String url) {
+        File file = null;
+        try {
+            String fileName = Uri.parse(url).getLastPathSegment();
+            file = File.createTempFile(fileName, null, context.getCacheDir());
+        } catch (IOException e) {
+            // Error while creating file
         }
-        catch(Exception sqlEx)
-        {
-            Log.e("MainActivity", sqlEx.getMessage(), sqlEx);
-        }
+        return file;
     }
 
     public String createStringCsvLine(TiroCorredor tiroCorredor)

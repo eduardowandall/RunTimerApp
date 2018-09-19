@@ -1,4 +1,4 @@
-package com.mcuhq.simplebluetooth;
+package com.wandall.runtimer;
 
 import org.junit.Test;
 

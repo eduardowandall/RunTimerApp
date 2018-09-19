@@ -1,4 +1,4 @@
-package com.mcuhq.simplebluetooth;
+package com.wandall.runtimer;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
