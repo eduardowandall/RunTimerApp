@@ -16,7 +16,7 @@ import java.util.Date;
 public class BluetoothListener {
     private final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
     private final static int CONNECTING_STATUS = 3; // used in bluetooth handler to identify message status
-    private final static String INTENT_SEND_BROACAST_TIRO = "com.mcuhq.simplebluetooth.BROADCAST_TEMPO_TIRO";
+    public final static String INTENT_SEND_BROADCAST_TIRO = "com.wandall.runtimer.BROADCAST_TEMPO_TIRO";
     public final static String EXTRA_PE_PLATAFORMA = "PePlataforma";
     public final static String EXTRA_PRIMEIRA_CORRIDA = "primeiraCorrida";
     public final static String EXTRA_SEGUNDA_CORRIDA = "segundaCorrida";
@@ -39,7 +39,7 @@ public class BluetoothListener {
             }
             Log.i("received", readMessage);
 
-            Intent intent = new Intent(INTENT_SEND_BROACAST_TIRO);
+            Intent intent = new Intent(INTENT_SEND_BROADCAST_TIRO);
             if (readMessage.contains("MTapete A")) {
                 intent.putExtra(EXTRA_PE_PLATAFORMA,true);
                 context.sendBroadcast(intent);

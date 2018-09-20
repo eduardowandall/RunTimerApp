@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Simple Bluetooth</string>
+    <string name="app_name">Run Timer</string>
+    <string name="msg_aguardando_tiro">Aguardando Tiro...</string>
+    <string name="msg_inicio_corrida">Corrida Iniciada</string>
+    <string name="title_share_file">Salvar relatório</string>
+    <string name="shared_file_name">Relatório Corridas</string>
+    <string name="botao_exportar">Exportar relatório</string>
+    <string name="botao_procurar_dispositivos">Procurar dispositivos</string>
+    <string name="botao_mostrar_dispositivos_pareados">Mostrar dispositivos pareados</string>
 </resources>
