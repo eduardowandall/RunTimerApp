@@ -15,6 +15,9 @@ public interface TiroCorredorDao {
     @Query("SELECT * FROM tiroCorredor order by uid desc")
     List<TiroCorredor> getAll();
 
+    @Query("SELECT count(*) FROM tiroCorredor")
+    int getCount();
+
     @Query("SELECT * FROM tiroCorredor WHERE uid IN (:userIds)")
     List<TiroCorredor> loadAllByIds(int[] userIds);
 

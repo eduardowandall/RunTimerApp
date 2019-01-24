@@ -23,11 +23,12 @@ public class HistoricoTiroAdapter extends ArrayAdapter<TiroCorredor> {
         super(context, resource, objects);
         tiros = objects;
 
-        formatter = new SimpleDateFormat("mm:ss");
+        formatter = new SimpleDateFormat("ss.SSS");
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        String placeholder = "00.000";
         TiroCorredor tiro = getItem(i);
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_historico_tiro, viewGroup, false);
@@ -38,9 +39,9 @@ public class HistoricoTiroAdapter extends ArrayAdapter<TiroCorredor> {
         TextView textSegundaCorrida = view.findViewById(R.id.textSegundaCorrida);
         TextView textNomeCorredor = view.findViewById(R.id.textNomeCorredor);
         // Populate the data into the template view using the data object
-        textPrimeiraCorrida.setText(tiro.getPrimeiraCorrida() == null ? "00:00" : formatter.format(tiro.getPrimeiraCorrida()));
-        textTempoDecorridoPlataforma.setText(tiro.getTempoDecorridoPlataforma() == null ? "00:00" : formatter.format(tiro.getTempoDecorridoPlataforma()));
-        textSegundaCorrida.setText(tiro.getSegundaCorrida() == null ? "00:00" : formatter.format(tiro.getSegundaCorrida()));
+        textPrimeiraCorrida.setText(tiro.getPrimeiraCorrida() == null ? placeholder : formatter.format(tiro.getPrimeiraCorrida()));
+        textTempoDecorridoPlataforma.setText(tiro.getTempoDecorridoPlataforma() == null ? placeholder : formatter.format(tiro.getTempoDecorridoPlataforma()));
+        textSegundaCorrida.setText(tiro.getSegundaCorrida() == null ? placeholder : formatter.format(tiro.getSegundaCorrida()));
         textNomeCorredor.setText(tiro.getNome());
         // Return the completed view to render on screen
         return view;

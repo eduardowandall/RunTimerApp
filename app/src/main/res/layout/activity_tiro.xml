@@ -12,6 +12,7 @@
     <EditText
         android:id="@+id/nomeCorredor"
         android:layout_width="match_parent"
+        android:inputType="textNoSuggestions"
         android:layout_height="wrap_content"/>
 
     <TextView
@@ -46,7 +47,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="18sp"
-            android:text="00:00" />
+            android:text="00.000" />
 
         <TextView
             android:id="@+id/tempoDecorridoPlataforma"
@@ -57,7 +58,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="18sp"
-            android:text="00:00" />
+            android:text="00.000" />
 
         <TextView
             android:id="@+id/tempoSegundaCorrida"
@@ -68,7 +69,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="18sp"
-            android:text="00:00" />
+            android:text="00.000" />
     </LinearLayout>
 
     <ListView

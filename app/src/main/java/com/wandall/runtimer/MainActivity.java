@@ -15,6 +15,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.util.LruCache;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -349,18 +350,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     static class IncomingHandler extends Handler {
-        private final WeakReference<BluetoothListener> mService;
+        private final LruCache<String, BluetoothListener> mMemoryCache;
 
         IncomingHandler(BluetoothListener service) {
-            mService = new WeakReference(service);
+            final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+            // Use 1/8th of the available memory for this memory cache.
+            final int cacheSize = maxMemory / 8;
+
+            mMemoryCache = new LruCache(cacheSize);
+            addServiceMemoryCache("BluetoothListener",service);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            BluetoothListener service = mService.get();
+            BluetoothListener service = getServiceFromMemCache("BluetoothListener");
             if (service != null) {
                 service.handleMessage(msg);
             }
+        }
+        public void addServiceMemoryCache(String key, BluetoothListener bitmap) {
+            if (getServiceFromMemCache(key) == null) {
+                mMemoryCache.put(key, bitmap);
+            }
+        }
+
+        public BluetoothListener getServiceFromMemCache(String key) {
+            return mMemoryCache.get(key);
         }
     }
 }

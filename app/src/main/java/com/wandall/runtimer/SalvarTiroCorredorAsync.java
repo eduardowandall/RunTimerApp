@@ -26,8 +26,8 @@ public class SalvarTiroCorredorAsync extends AsyncTask<Void, Void, Integer> {
         Activity activity = weakActivity.get();
         final AppDatabase db = Room.databaseBuilder(activity.getApplicationContext(),
                 AppDatabase.class, "database-name").build();
-        if(tiro.getNome() == null || tiro.getNome().isEmpty())
-            tiro.setNome("Corredor Sem Nome");
+        if (tiro.getNome() == null || tiro.getNome().isEmpty())
+            tiro.setNome("Corredor #" + (db.tiroCorredorDao().getCount() + 1));
         db.tiroCorredorDao().insertAll(tiro);
         return 1;
     }
@@ -38,6 +38,6 @@ public class SalvarTiroCorredorAsync extends AsyncTask<Void, Void, Integer> {
         if (activity == null) {
             return;
         }
-        ((TiroActivity)activity).refreshActivity(tiro);
+        ((TiroActivity) activity).refreshActivity(tiro);
     }
 }

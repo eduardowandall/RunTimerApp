@@ -44,7 +44,7 @@ public class TiroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiro);
-        formatter = new SimpleDateFormat("mm:ss");
+        formatter = new SimpleDateFormat("ss.SSS");
         tempoPrimeiraCorrida = findViewById(R.id.tempoPrimeiraCorrida);
         tempoDecorridoPlataforma = findViewById(R.id.tempoDecorridoPlataforma);
         tempoSegundaCorrida = findViewById(R.id.tempoSegundaCorrida);
@@ -105,9 +105,10 @@ public class TiroActivity extends AppCompatActivity {
 
     private void clearFields() {
         nomeCorredor.setText(null);
-        tempoPrimeiraCorrida.setText("00:00");
-        tempoDecorridoPlataforma.setText("00:00");
-        tempoSegundaCorrida.setText("00:00");
+        String text = "00.000";
+        tempoPrimeiraCorrida.setText(text);
+        tempoDecorridoPlataforma.setText(text);
+        tempoSegundaCorrida.setText(text);
     }
 
     @Override
