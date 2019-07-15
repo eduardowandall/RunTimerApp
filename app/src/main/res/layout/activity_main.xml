@@ -9,23 +9,30 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.wandall.runtimer.MainActivity">
 
-
+    <Switch
+        android:id="@+id/toggleBluetooth"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth"
+        android:checked="true"
+        android:gravity="left"/>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toggleBluetooth">
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/discoverDevicesListView"
+            android:choiceMode="singleChoice" />
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/infoListView"
+            android:id="@+id/pairedDevicesListView"
             android:choiceMode="singleChoice"
-            android:layout_alignLeft="@+id/bluetoothStatus"
-            android:layout_alignStart="@+id/bluetoothStatus"
-            android:scaleX="1.7"
-            android:scaleY="1.7"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"  />
+            android:layout_below="@+id/discoverDevicesListView" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -50,32 +57,5 @@
                 android:maxLines="1"
                 android:layout_centerHorizontal="true" />
         </LinearLayout>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bluetooth ON"
-            android:id="@+id/scan"
-            android:layout_centerVertical="true" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/botao_mostrar_dispositivos_pareados"
-            android:id="@+id/PairedBtn"
-            android:layout_below="@+id/scan" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/botao_procurar_dispositivos"
-            android:id="@+id/discover"/>
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/devicesListView"
-            android:choiceMode="singleChoice"
-            android:layout_below="@+id/PairedBtn" />
-
     </LinearLayout>
 </RelativeLayout>
